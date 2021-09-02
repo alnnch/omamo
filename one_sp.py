@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-
+'''This code is for terminal'''
 from sys import argv
 
 import pyoma.browser.db as db
