@@ -100,7 +100,7 @@ def GO_overlap(array):
         overlap = [int(('{0}'.format(a)).strip('GO:')) for a in term1_plus_parents_ids.intersection(term2_plus_parents_ids)]
         overlap_defined = []
         
-        #Only consider GO terms that are present in the Alex's file and which information content >= 5
+        #Only consider GO terms that are present in the go_annotations file and with information content >= 5
         for i in overlap:
             if i in list(inf_content.keys()):
                 if inf_content[i] >=5:
@@ -155,7 +155,7 @@ def high_similarity_fnctn_ogs(GO_overlap_output, threshold):
 def frequency_GO_filter(high_sim_fn_output, lower_limit, upper_limit):
     
     '''Gives a list of overlapping GO terms that occur between lower_ and upper_limit times + count
-    Input: high functional similarity array & lower threshold count value
+    Input: high functional similarity array & lower and upper threshold count values
     Output: [(GO_ID1, count1), (GO_ID2, count2),...]'''
     
     large_list = []
@@ -200,7 +200,7 @@ def gene_name_mapper(entry_nr):
 
 def table2(species, frequency_GO_filter_output,high_similarity_fnctn_ogs_output, threshold):
     
-    '''Creates pandas dataframe [GO ID, [human genes], [model genes], no. of orthologs, av. similarity, sum of similarity values]'''
+    '''Creates pandas dataframe [GO ID, [human genes], [model genes], no. of orthologs, av. functional similarity & st. dev., sum of similarity values]'''
     
     output = [] 
     
@@ -220,10 +220,10 @@ def table2(species, frequency_GO_filter_output,high_similarity_fnctn_ogs_output,
                         s.append(e[2])
                 av_sim = sum(s)/len(human_genes)
                 if len(s) > 1:
-                    st_dev = round(stats.stdev(s),2)
+                    st_dev = round(stats.stdev(s),4)
                 else:
-                    st_dev = '0.00'
-                av_and_st_dev = str(round(av_sim,2)) + ' +/- ' + str(st_dev)
+                    st_dev = '0.0000'
+                av_and_st_dev = str(round(av_sim,4)) + ' ± ' + str(st_dev)
                 h_genes_uniprot = []
                 for t in human_genes:
                     h_genes_uniprot.append(gene_name_mapper(t))
@@ -239,14 +239,14 @@ def table2(species, frequency_GO_filter_output,high_similarity_fnctn_ogs_output,
         except KeyError:
             pass
     
-    df = pd.DataFrame(output, columns = ['GO ID', 'Species', 'H Genes', 'S Genes', 'No. of ogs','Average % func. similarity', 'Sum of func. similarity values'])
+    df = pd.DataFrame(output, columns = ['GO ID', 'Species', 'Human Genes', 'Species Genes', 'No. of OGs','Average func. similarity ± st. dev', 'Score'])
                 
     return df
 
 
 def table1(species, frequency_GO_filter_output,high_similarity_fnctn_ogs_output, threshold):
     
-    '''Create table ['GO ID', 'Species', 'HUMAN Gene', 'Species Gene', 'Functional Similarity']'''
+    '''Create table ['GO ID', 'Species', 'Human Gene', 'Species Gene', 'Functional Similarity']'''
     output = []
     
     for i in high_similarity_fnctn_ogs_output:
@@ -255,36 +255,20 @@ def table1(species, frequency_GO_filter_output,high_similarity_fnctn_ogs_output,
             try:
                 if inf_content[e[0]] >= 5:
                     if e[0] in i[1]:
-                        small_list.append(e[0])
                         small_list.append(species)
                         small_list.append(gene_name_mapper(i[0][0]))
                         small_list.append(gene_name_mapper(i[0][1]))
-                        small_list.append(round(i[2],2))
+                        small_list.append(round(i[2],4))
                         output.append(small_list)
                         break
             except KeyError:
                 pass
         
     
-    df = pd.DataFrame(output, columns = ['GO ID', 'Species', 'H Gene', 'S Gene', '% Func. Similarity' ])
+    df = pd.DataFrame(output, columns = ['Species', 'Human Gene', 'Species Gene', 'Func. Similarity' ])
                     
     return df
-    
-
-def save_histogram(overlap, file_name):
-    
-    '''Save functional similarity histogram as a png file'''
-    
-    sim_list = [i[2] for i in overlap]
-    num_bins = np.arange(0, 100.5, 0.5).tolist()
-    n, bins, patches = plt.hist(sim_list, num_bins,facecolor='purple' )
-    plt.title('Percentage Functional Similarity of orthologous pairs')
-    plt.xlabel('Functional Similarity (%)')
-    plt.ylabel('Frequency')
-    plt.savefig(file_name)
-    
-
-
+     
 
 if __name__ == "__main__":
 
