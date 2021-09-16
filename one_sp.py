@@ -128,7 +128,7 @@ def GO_overlap(array):
             union_inf_cont = sum(list(inf_content[e] for e in union_defined))
                 
             try:
-                similarity = 100*intrsctn_inf_cont/union_inf_cont
+                similarity = intrsctn_inf_cont/union_inf_cont
                 small_list.append(similarity)
                 output.append(small_list) 
             except ZeroDivisionError:
