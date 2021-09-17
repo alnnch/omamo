@@ -298,7 +298,7 @@ if __name__ == "__main__":
 	print('ORTHOLOGOUS PAIRS FOR {} HAVE BEEN SAVED AS A PICKLE FILE'.format(species))
 
 	overlap = GO_overlap(og_pairs)
-	similar_ogs = high_similarity_fnctn_ogs(overlap, 5)
+	similar_ogs = high_similarity_fnctn_ogs(overlap, 0.05)
 	high_fr_go = frequency_GO_filter(similar_ogs,1,5000)
 
 	output1 = table1(species, high_fr_go,similar_ogs,5)
