@@ -234,7 +234,7 @@ def table2(species, frequency_GO_filter_output,high_similarity_fnctn_ogs_output,
                 small_list.append(','.join(sp_genes_uniprot))
                 small_list.append(len(human_genes))
                 small_list.append(av_and_st_dev)
-                small_list.append(sum(s))
+                small_list.append(round(sum(s), 4))
                 output.append(small_list)
         except KeyError:
             pass
