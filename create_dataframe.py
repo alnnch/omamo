@@ -32,6 +32,6 @@ if __name__ == "__main__":
 
 	df = create_dataframe(directory)
 
-	df.to_csv('trial.csv', sep = '\t')
+	df.to_csv('df.csv', sep = '\t')
 	
 	
