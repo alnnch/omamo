@@ -24,5 +24,5 @@ where arg is the name of the directory where the user wishes to save the output.
 
 Finally, the output data frame is ready as a csv file 'df.csv'.
 
-You can also visit out website[https://omabrowser.org/omamo], where you can browse biological processes to study in 50 unicellular species.
+You can also visit out [website](https://omabrowser.org/omamo), where you can browse biological processes to study in 50 unicellular species.
 
